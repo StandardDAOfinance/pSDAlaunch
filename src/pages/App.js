@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import { useEthereumWeb3React } from '../hooks';
 import Web3ReactManager from '../components/Web3ReactManager';
 import NavBar from '../components/NavBar';
+import Home from './Home';
 
 function App() {
   const { active, chainId, deactivate, account, activate } = useEthereumWeb3React();
@@ -12,7 +13,7 @@ function App() {
       <NavBar active={active} deactivate={deactivate} account={account} activate={activate} />
 
       <Web3ReactManager>
-        <Box></Box>
+        <Home />
       </Web3ReactManager>
     </>
   );
