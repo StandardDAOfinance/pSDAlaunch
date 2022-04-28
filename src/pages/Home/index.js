@@ -15,7 +15,7 @@ import {
   TypographyMintedTokensStyle,
   TypographyPriceStyle,
   TypographyInfoStyle,
-  ButtonPurchaseStyle,
+  TypographyPercentStyle,
 } from './styleds';
 import _ from 'lodash';
 import MultiProgress from 'react-multi-progress';
@@ -172,7 +172,7 @@ const Home = () => {
               />
             </Grid>
             <Grid container item xs={1} direction="row" justifyContent="center" alignItems="center">
-              <TypographyMintedTokensStyle gutterBottom>70%</TypographyMintedTokensStyle>
+              <TypographyPercentStyle gutterBottom>70%</TypographyPercentStyle>
             </Grid>
           </Grid>
           <TypographyInfoStyle>

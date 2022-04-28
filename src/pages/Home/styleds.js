@@ -44,6 +44,14 @@ export const TypographyMintedTokensStyle = styled(Typography)`
     opacity: 0.72,
   })}
 `;
+export const TypographyPercentStyle = styled(Typography)`
+  ${mq({
+    ...fontBlinker,
+    fontSize: ['24px', '36px'],
+    textAlign: 'center',
+    opacity: 0.72,
+  })}
+`;
 
 export const TypographyPriceStyle = styled(Typography)`
   ${mq({
