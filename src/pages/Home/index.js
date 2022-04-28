@@ -9,6 +9,8 @@ import Box from '@mui/material/Box';
 import { Header } from '../../components/Backgrounds';
 import { WalletToast } from '../../components/Toast';
 import { SEVERITY, MESSAGE } from '../../constants/wallet';
+import { ABI } from '../../constants/contractABI';
+import { CONTRACT_ADDRESS } from '../../constants';
 import {
   BoxStyle,
   TypographyTitleStyle,
@@ -16,17 +18,27 @@ import {
   TypographyPriceStyle,
   TypographyInfoStyle,
   TypographyPercentStyle,
+  ButtonPurchaseStyle,
+  RegisterInputStyle,
 } from './styleds';
 import _ from 'lodash';
 import MultiProgress from 'react-multi-progress';
-import PurchaseButton from './PurchseButton';
+import { BigNumber } from '@ethersproject/bignumber';
+import { ethers } from 'ethers';
+import { useEthereumContract, useEthereumNetworkContract } from '../../hooks/useContract';
 
-const Home = () => {
+const Home = (props) => {
+  const { active, chainId, account } = props;
+
   const [toastInfo, setToastInfo] = useState({});
   const [isToast, setIsToast] = useState(false);
   const [amount, setAmount] = useState(null);
   const [input, setInput] = useState();
   const [isNumber, setIsNumber] = useState(true);
+  const [maxDai, setMaxDai] = useState(null);
+  const [maxDaiPerInvestor, setMaxDaiPerInvestor] = useState(null);
+  const [totalDai, setTotalDai] = useState(null);
+  const [startingTime, setStartingTime] = useState(null);
 
   const isLoading = false;
 
@@ -43,14 +55,40 @@ const Home = () => {
   const handleToastClose = () => {
     setIsToast(false);
   };
+  const connectedToast = () => {
+    setIsToast(false);
+    setIsToast(true);
+    setToastInfo({ severity: SEVERITY.SUCCESS, message: MESSAGE.CONNECTED });
+  };
 
-  const handlePurchase = () => {
-    console.log('purchase handle');
+  const notConnectedToast = () => {
+    setIsToast(false);
+    setIsToast(true);
+    setToastInfo({ severity: SEVERITY.ERROR, message: MESSAGE.NOT_CONNECTED_WALLET });
+  };
+
+  const wrongNetworkToast = () => {
+    setIsToast(false);
+    setIsToast(true);
+    setToastInfo({
+      severity: SEVERITY.ERROR,
+      message:
+        process.env.REACT_APP_DEFAULT_ETHEREUM_NETWORK_CHAIN_ID === '1'
+          ? MESSAGE.WRONG_NETWORK
+          : MESSAGE.WRONG_NETWORK_TEST,
+    });
+  };
+  const notSaleTimeToast = () => {
+    setIsToast(false);
+    setIsToast(true);
+    setToastInfo({
+      severity: SEVERITY.ERROR,
+      message: MESSAGE.NOT_SALE_TIME,
+    });
   };
 
   const handleChange = (event) => {
     const result = checkIsNumber(event.target.value);
-    console.log(result);
     if (result) {
       setAmount(event.target.value);
       setIsNumber(true);
@@ -59,7 +97,92 @@ const Home = () => {
     }
   };
 
-  if (isLoading) {
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      if (active) {
+        if (`${chainId}` === process.env.REACT_APP_DEFAULT_ETHEREUM_NETWORK_CHAIN_ID) {
+          connectedToast();
+        } else {
+          wrongNetworkToast();
+        }
+      } else {
+        notConnectedToast();
+      }
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [chainId, active]);
+
+  const ethereumContract = useEthereumNetworkContract(CONTRACT_ADDRESS, ABI, true);
+  const ethereumInjectedContract = useEthereumContract(CONTRACT_ADDRESS, ABI, true);
+  useEffect(() => {
+    const getStatus = async () => {
+      if (ethereumContract && ethereumContract.provider) {
+        Promise.all([
+          ethereumContract.maxDai(),
+          ethereumContract.maxDaiPerInvestor(),
+          ethereumContract.totalDai(),
+          ethereumContract.startingTime(),
+        ]).then(([maxDai, maxDaiPerInvestor, totalDai, startingTime]) => {
+          setMaxDai(BigNumber.from(maxDai).toNumber());
+          setMaxDaiPerInvestor(BigNumber.from(maxDaiPerInvestor).toNumber());
+          setTotalDai(BigNumber.from(totalDai).toNumber());
+          setStartingTime(BigNumber.from(startingTime).toNumber());
+          ethereumContract.removeAllListeners('Purchased');
+          ethereumContract.on('Purchased', (investorAddress, amount, total, event) => {
+            setTotalDai(BigNumber.from(total).toNumber());
+          });
+        });
+      }
+    };
+
+    getStatus();
+
+    return () => {
+      if (ethereumContract && ethereumContract.provider) {
+        ethereumContract.removeAllListeners('Purchased');
+      }
+    };
+  }, [ethereumContract]);
+
+  const handlePurchase = async () => {
+    if (active && amount) {
+      if (`${chainId}` === process.env.REACT_APP_DEFAULT_ETHEREUM_NETWORK_CHAIN_ID) {
+        if (startingTime <= new Date().getTime() / 1000) {
+          const presaleCounter = await ethereumContract.presaleCounter(account);
+          if (maxDai >= parseInt(presaleCounter) + amount) {
+            const tx = await ethereumInjectedContract.purchase(amount);
+            const receipt = await tx.wait();
+            if (!!receipt.transactionStatus) {
+              setIsToast(false);
+              setIsToast(true);
+              setToastInfo({ severity: SEVERITY.ERROR, message: MESSAGE.PURCHASE_SUCCESS });
+            } else {
+              setIsToast(false);
+              setIsToast(true);
+              setToastInfo({ severity: SEVERITY.ERROR, message: MESSAGE.PURCHASE_FAIL });
+            }
+          } else {
+            setIsToast(false);
+            setIsToast(true);
+            setToastInfo({ severity: SEVERITY.ERROR, message: MESSAGE.EXCEED_PRESALE_MAX });
+          }
+        } else {
+          notSaleTimeToast();
+        }
+      } else {
+        wrongNetworkToast();
+      }
+    } else {
+      notConnectedToast();
+    }
+
+    return null;
+  };
+
+  if (maxDai === null || totalDai === null || maxDaiPerInvestor === null || startingTime === null) {
     return (
       <>
         <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={true}>
@@ -77,7 +200,9 @@ const Home = () => {
         <Header />
         <Grid container direction="column" justifyContent="center" alignItems="center">
           <TypographyTitleStyle gutterBottom>Bringing the impact back to ESG</TypographyTitleStyle>
-          <TypographyMintedTokensStyle gutterBottom>$2.4M / $3.5M</TypographyMintedTokensStyle>
+          <TypographyMintedTokensStyle gutterBottom>
+            ${totalDai / 1000000}M / ${maxDai / 1000000}M
+          </TypographyMintedTokensStyle>
           <Grid container item direction="row" justifyContent="center" alignItems="center">
             <Grid container item xs={11} direction="row">
               <Grid
@@ -161,7 +286,7 @@ const Home = () => {
                 transitionTime={1.2}
                 elements={[
                   {
-                    value: 70,
+                    value: (totalDai * 100) / maxDai,
                     color: '#6cbdc3',
                   },
                 ]}
@@ -172,7 +297,9 @@ const Home = () => {
               />
             </Grid>
             <Grid container item xs={1} direction="row" justifyContent="center" alignItems="center">
-              <TypographyPercentStyle gutterBottom>70%</TypographyPercentStyle>
+              <TypographyPercentStyle gutterBottom>
+                {(totalDai * 100) / maxDai}%
+              </TypographyPercentStyle>
             </Grid>
           </Grid>
           <TypographyInfoStyle>
@@ -186,15 +313,36 @@ const Home = () => {
               https://t.me/StandardDAO
             </Link>
           </TypographyInfoStyle>
-          <PurchaseButton
-            sx={{ mt: 6 }}
-            handlePurchase={handlePurchase}
-            handleChange={handleChange}
-            isNumber={isNumber}
-            inputRef={(node) => {
-              setInput(node);
+          <Box
+            component="form"
+            noValidate
+            autoComplete="off"
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              mt: 1,
+              border: '1px solid rgba(255, 255, 255, 0.24)',
+              borderRadius: '50px',
+              padding: '0px 4px 0px 24px',
+              maxWidth: '400px',
+              height: '54px',
             }}
-          />
+          >
+            <RegisterInputStyle
+              error={!isNumber}
+              required
+              placeholder="Amount of DAI"
+              disableUnderline={isNumber ? true : false}
+              onChange={handleChange}
+              inputRef={(node) => {
+                setInput(node);
+              }}
+            />
+            <ButtonPurchaseStyle variant="contained" onClick={handlePurchase}>
+              Buy pSDA
+            </ButtonPurchaseStyle>
+          </Box>
         </Grid>
       </Container>
     </BoxStyle>

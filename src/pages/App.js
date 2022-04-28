@@ -20,7 +20,7 @@ function App() {
       <NavBar active={active} deactivate={deactivate} account={account} activate={activate} />
       <Box sx={{ flexGrow: 1 }}>
         <Web3ReactManager>
-          <Home />
+          <Home active={active} chainId={chainId} account={account} />
         </Web3ReactManager>
       </Box>
       <Footer />

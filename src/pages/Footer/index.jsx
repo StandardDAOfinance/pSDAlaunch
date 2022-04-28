@@ -132,7 +132,7 @@ const Footer = (props) => {
           </Grid>
           <Grid item container md={6} direction="row" justifyContent="center" alignItems="center">
             <Countdown
-              date={1651190400000} //4.28 - 5pm PST
+              date={1651190400000}
               renderer={renderer}
               onComplete={handleTimerEnd}
             ></Countdown>
