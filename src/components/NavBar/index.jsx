@@ -7,7 +7,7 @@ import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Slide from '@mui/material/Slide';
 import { injected } from '../../connectors';
 import { displayAddress } from '../../utils/displayAddress';
-import logo from '../../assets/images/logo.svg';
+import logo from '../../assets/images/logo.png';
 import PropTypes from 'prop-types';
 
 const fontBlinker = { fontFamily: 'Blinker', fontStyle: 'normal', fontWeight: 'bold' };
@@ -56,7 +56,7 @@ const NavBar = (props) => {
         <AppBarStyle>
           <Toolbar sx={{ justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', direction: 'row', alignItems: 'center', padding: '5px' }}>
-              <img alt="pSDA" src={logo} width="55" />
+              <img alt="pSDA" src={logo} width="150" />
             </Box>
             <WalletButton variant="outlined" onClick={handleClick}>
               {active ? displayAddress(account) : 'Connect Wallet'}
