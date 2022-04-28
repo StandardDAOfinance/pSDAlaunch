@@ -2,7 +2,7 @@ import headerBG from '../../assets/images/headerBG.svg';
 
 const styles = {
   HeaderBG: {
-    position: 'absolute',
+    position: 'fixed',
     top: '0',
     left: '0',
     width: '100%',

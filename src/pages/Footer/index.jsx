@@ -42,7 +42,6 @@ const TypographyCompanyNameStyle = styled(Typography)({
 
 const BoxStyle = styled(Box)`
   ${mq({
-    marginBottom: ['10px', '10px'],
     marginTop: '20px',
   })}
 `;
@@ -144,7 +143,7 @@ const Footer = (props) => {
             alignItems="center"
           >
             <Countdown
-              date={new Date().getTime() + 1000 * 1000}
+              date={1651190400000} //4.28 - 5pm PST
               renderer={renderer}
               onComplete={handleTimerEnd}
             ></Countdown>

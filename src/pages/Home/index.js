@@ -19,14 +19,44 @@ import {
 } from './styleds';
 import _ from 'lodash';
 import MultiProgress from 'react-multi-progress';
+import PurchaseButton from './PurchseButton';
 
 const Home = () => {
   const [toastInfo, setToastInfo] = useState({});
   const [isToast, setIsToast] = useState(false);
+  const [amount, setAmount] = useState(null);
+  const [input, setInput] = useState();
+  const [isNumber, setIsNumber] = useState(true);
+
   const isLoading = false;
 
+  const checkIsNumber = (str) => {
+    let re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    const res = str.trim();
+    if (re.test(res)) {
+      return res;
+    } else {
+      return null;
+    }
+  };
   const handleToastClose = () => {
     setIsToast(false);
+  };
+
+  const handlePurchase = () => {
+    console.log('purchase handle');
+  };
+
+  const handleChange = (event) => {
+    const result = checkIsNumber(event.target.value);
+    if (result) {
+      setAmount(event.target.value);
+      setIsNumber(true);
+    } else {
+      setIsNumber(false);
+    }
   };
 
   if (isLoading) {
@@ -128,7 +158,15 @@ const Home = () => {
               https://t.me/StandardDAO
             </Link>
           </TypographyInfoStyle>
-          <ButtonPurchaseStyle variant="contained">Buy pSDA Tokens</ButtonPurchaseStyle>
+          <PurchaseButton
+            sx={{ mt: 6 }}
+            handlePurchase={handlePurchase}
+            handleChange={handleChange}
+            isNumber={isNumber}
+            inputRef={(node) => {
+              setInput(node);
+            }}
+          />
         </Grid>
       </Container>
     </BoxStyle>
