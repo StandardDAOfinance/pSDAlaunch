@@ -43,18 +43,21 @@ const TypographyCompanyNameStyle = styled(Typography)({
 const BoxStyle = styled(Box)`
   ${mq({
     marginTop: '20px',
+    marginBottom: '20px',
   })}
 `;
 const TypographyTimerTitleStyle = styled(Typography)({
   ...fontBlinker,
   fontWeight: 600,
-  fontSize: '16px',
+  fontSize: '20px',
   opacity: 0.72,
 });
 
 const TypographyTimerTimeStyle = styled(Typography)({
   ...fontBlinker,
-  fontSize: '16px',
+  fontSize: '28px',
+  color: '#90caf9',
+  width: '160px',
 });
 const Footer = (props) => {
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
@@ -70,7 +73,7 @@ const Footer = (props) => {
         <Box sx={{ display: 'flex', direction: 'row', alignItems: 'center' }} gutterBottom>
           <TypographyTimerTitleStyle>Pre-Sale starts in&nbsp;&nbsp;</TypographyTimerTitleStyle>
           <TypographyTimerTimeStyle>
-            {days}d&nbsp;:&nbsp;{hours}h&nbsp;:&nbsp;{minutes}m&nbsp;:&nbsp;{seconds}s
+            {hours}h&nbsp;:&nbsp;{minutes}m&nbsp;:&nbsp;{seconds}s
           </TypographyTimerTimeStyle>
         </Box>
       );
@@ -84,64 +87,50 @@ const Footer = (props) => {
   return (
     <BoxStyle>
       <Container>
-        <Grid container direction="row" justifyContent="space-around" alignItems="center">
-          <Grid
-            item
-            container
-            md={6}
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="center"
-          >
+        <Grid container direction="row" justifyContent="center" alignItems="center">
+          <Grid item container md={6} direction="row" justifyContent="center" alignItems="center">
             <Link
               href="https://www.linkedin.com/company/standarddao"
               target="_blank"
               rel="noopener noreferrer"
-              // sx={{ display: 'flex', direction: 'row', alignItems: 'center', padding: '5px' }}
+              sx={{ display: 'flex', direction: 'row', alignItems: 'center', padding: '5px' }}
             >
-              <SvgIcon component={linkedinIcon} inheritViewBox />
+              <SvgIcon component={linkedinIcon} inheritViewBox sx={{ fontSize: 40 }} />
             </Link>
             <Link
               href="https://twitter.com/StandardDAO"
               target="_blank"
               rel="noopener noreferrer"
-              // sx={{ display: 'flex', direction: 'row', alignItems: 'center', padding: '5px' }}
+              sx={{ display: 'flex', direction: 'row', alignItems: 'center', padding: '5px' }}
             >
-              <SvgIcon component={twitterIcon} inheritViewBox />
+              <SvgIcon component={twitterIcon} inheritViewBox sx={{ fontSize: 40 }} />
             </Link>
             <Link
               href="https://standarddao.medium.com/"
               target="_blank"
               rel="noopener noreferrer"
-              // sx={{ display: 'flex', direction: 'row', alignItems: 'center', padding: '5px' }}
+              sx={{ display: 'flex', direction: 'row', alignItems: 'center', padding: '5px' }}
             >
-              <SvgIcon component={mediumIcon} inheritViewBox />
+              <SvgIcon component={mediumIcon} inheritViewBox sx={{ fontSize: 40 }} />
             </Link>
+            {/* <Link
+              href="https://discord.gg/zh3FGaGX6H"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ display: 'flex', direction: 'row', alignItems: 'center', padding: '5px' }}
+            >
+              <SvgIcon component={youtubeIcon} inheritViewBox sx={{ fontSize: 40 }} />
+            </Link> */}
             <Link
               href="https://discord.gg/zh3FGaGX6H"
               target="_blank"
               rel="noopener noreferrer"
-              // sx={{ display: 'flex', direction: 'row', alignItems: 'center', padding: '5px' }}
+              sx={{ display: 'flex', direction: 'row', alignItems: 'center', padding: '5px' }}
             >
-              <SvgIcon component={youtubeIcon} inheritViewBox />
-            </Link>
-            <Link
-              href="https://discord.gg/zh3FGaGX6H"
-              target="_blank"
-              rel="noopener noreferrer"
-              // sx={{ display: 'flex', direction: 'row', alignItems: 'center', padding: '5px' }}
-            >
-              <SvgIcon component={discordIcon} inheritViewBox />
+              <SvgIcon component={discordIcon} inheritViewBox sx={{ fontSize: 40 }} />
             </Link>
           </Grid>
-          <Grid
-            item
-            container
-            md={6}
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="center"
-          >
+          <Grid item container md={6} direction="row" justifyContent="center" alignItems="center">
             <Countdown
               date={1651190400000} //4.28 - 5pm PST
               renderer={renderer}
