@@ -30,10 +30,10 @@ const PurchaseButton = (props) => {
         }}
       >
         <RegisterInputStyle
-          {...(!props.isNumber && { error: true })}
+          error={!props.isNumber}
+          required
           placeholder="Amount of DAI"
-          inputProps={ariaLabel}
-          disableUnderline={true}
+          disableUnderline={props.isNumber ? true : false}
           onChange={handleChange}
           inputRef={props.inputRef}
         />

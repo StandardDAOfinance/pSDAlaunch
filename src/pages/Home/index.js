@@ -31,8 +31,7 @@ const Home = () => {
   const isLoading = false;
 
   const checkIsNumber = (str) => {
-    let re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let re = /^[0-9]+$/;
 
     const res = str.trim();
     if (re.test(res)) {
@@ -51,6 +50,7 @@ const Home = () => {
 
   const handleChange = (event) => {
     const result = checkIsNumber(event.target.value);
+    console.log(result);
     if (result) {
       setAmount(event.target.value);
       setIsNumber(true);
@@ -77,7 +77,7 @@ const Home = () => {
         <Header />
         <Grid container direction="column" justifyContent="center" alignItems="center">
           <TypographyTitleStyle gutterBottom>Bringing the impact back to ESG</TypographyTitleStyle>
-          <TypographyMintedTokensStyle gutterBottom>$24.1M / $50M</TypographyMintedTokensStyle>
+          <TypographyMintedTokensStyle gutterBottom>$2.4M / $3.5M</TypographyMintedTokensStyle>
           <Grid container item direction="row" justifyContent="center" alignItems="center">
             <Grid container item xs={11} direction="row">
               <Grid
