@@ -3,6 +3,7 @@ import Container from '@mui/material/Container';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import { Header } from '../../components/Backgrounds';
@@ -13,6 +14,7 @@ import {
   TypographyTitleStyle,
   TypographyMintedTokensStyle,
   TypographyPriceStyle,
+  TypographyInfoStyle,
   ButtonPurchaseStyle,
 } from './styleds';
 import _ from 'lodash';
@@ -45,7 +47,9 @@ const Home = () => {
         <Header />
         <Grid container direction="column" justifyContent="center" alignItems="center">
           <TypographyTitleStyle gutterBottom>Bringing the impact back to ESG</TypographyTitleStyle>
-          <TypographyMintedTokensStyle gutterBottom>$24.1M</TypographyMintedTokensStyle>
+          <TypographyMintedTokensStyle gutterBottom>
+            20,000,00 pSDA / 60,000,000 pSDA
+          </TypographyMintedTokensStyle>
           <Grid container item direction="row" justifyContent="center" alignItems="center">
             <Grid container item xs={4} direction="row" justifyContent="center" alignItems="center">
               <TypographyPriceStyle>$0.025</TypographyPriceStyle>
@@ -104,21 +108,27 @@ const Home = () => {
               elements={[
                 {
                   value: 70,
-                  color: '#fb881d',
+                  color: '#6cbdc3',
                 },
               ]}
               height={36}
               roundLastElement={false}
               backgroundColor="gray"
-              border={'5px solid white'}
+              border={'3px solid white'}
             />
-            {/* #c4a4cc
-            #332b80
-            #6cbdc3
-            #1a9299
-            #105759 */}
           </Grid>
-          <ButtonPurchaseStyle variant="contained">Buy Tokens</ButtonPurchaseStyle>
+          <TypographyInfoStyle>
+            *If you are not whitelisted please click here{' '}
+            <Link
+              href="https://t.me/StandardDAO"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ color: '#FFCD3E', opacity: 0.87 }}
+            >
+              https://t.me/StandardDAO
+            </Link>
+          </TypographyInfoStyle>
+          <ButtonPurchaseStyle variant="contained">Buy pSDA Tokens</ButtonPurchaseStyle>
         </Grid>
       </Container>
     </BoxStyle>

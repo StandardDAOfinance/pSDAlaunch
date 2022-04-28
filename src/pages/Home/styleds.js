@@ -22,6 +22,13 @@ export const TypographyTitleStyle = styled(Typography)`
     marginTop: ['30px', '50px'],
   })}
 `;
+export const TypographyInfoStyle = styled(Typography)`
+  ${mq({
+    ...fontBlinker,
+    fontSize: ['16px', '20px'],
+    marginTop: ['15px', '30px'],
+  })}
+`;
 export const TypographyMintedTokensStyle = styled(Typography)`
   ${mq({
     ...fontBlinker,
@@ -41,14 +48,15 @@ export const TypographyPriceStyle = styled(Typography)`
 export const ButtonPurchaseStyle = styled(Button)`
   ${mq({
     ...fontBlinker,
-    backgroundColor: '#FFD945',
-    fontSize: ['20px', '30px'],
-    textTransform: 'capitalize',
+    backgroundColor: '#6cbdc3',
+    fontSize: ['18px', '24px'],
+    color: '#105759',
+    textTransform: 'none',
     borderRadius: ['24px', '36px'],
-    padding: '6px 30px',
+    padding: '5px 20px',
     marginTop: ['20px', '30px'],
     '&:hover': {
-      backgroundColor: '#ffc107',
+      backgroundColor: '#1a9299',
     },
   })}
 `;
