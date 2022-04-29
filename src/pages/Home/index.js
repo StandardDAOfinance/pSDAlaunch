@@ -153,7 +153,7 @@ const Home = (props) => {
         if (`${chainId}` === process.env.REACT_APP_DEFAULT_ETHEREUM_NETWORK_CHAIN_ID) {
           if (startingTime <= new Date().getTime() / 1000) {
             const presaleCounter = await ethereumContract.presaleCounter(account);
-            if (maxDai >= parseInt(presaleCounter) + amount) {
+            if (maxDai >= ethers.utils.formatEther(presaleCounter) + amount) {
               setLoader(true);
               const txApprove = await daiTokenContract.approve(
                 CONTRACT_ADDRESS,
