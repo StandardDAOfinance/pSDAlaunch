@@ -132,7 +132,7 @@ const Home = (props) => {
           setStartingTime(BigNumber.from(startingTime).toNumber());
           ethereumContract.removeAllListeners('Purchased');
           ethereumContract.on('Purchased', (investorAddress, amount, total, event) => {
-            setTotalDai(ethers.utils.formatEther(totalDai));
+            setTotalDai(ethers.utils.formatEther(total));
           });
         });
       }
@@ -365,28 +365,3 @@ const Home = (props) => {
 };
 
 export default Home;
-
-// purchaseTokenContract.allowance(account, vipContract.address).then((allowanceForVip) => {
-//   setIsAllowedForVip(parseInt(allowanceForVip.toString()) > 0);
-// });
-
-// const handleApprove = async () => {
-//   setLoading(true);
-//   try {
-//     const tx = await purchaseTokenContract.approve(
-//       vipContract.address,
-//       ethers.constants.MaxUint256
-//     );
-//     await tx.wait();
-//     setIsToast(true);
-//     setToastInfo({ message: 'Successfully Approved', severity: 'success' });
-//     setReload(reload + 1);
-//   } catch (_) {
-//     setIsToast(true);
-//     setToastInfo({
-//       message: 'Please check network or view transaction on explorer',
-//       severity: 'error',
-//     });
-//   }
-//   setLoading(false);
-// };
