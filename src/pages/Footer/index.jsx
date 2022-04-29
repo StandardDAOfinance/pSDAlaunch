@@ -52,6 +52,12 @@ const TypographyTimerTitleStyle = styled(Typography)({
   fontSize: '20px',
   opacity: 0.72,
 });
+const TypographyTimerTitleStartedStyle = styled(Typography)({
+  ...fontBlinker,
+  fontWeight: 600,
+  fontSize: '20px',
+  color: '#FFCD3E',
+});
 
 const TypographyTimerTimeStyle = styled(Typography)({
   ...fontBlinker,
@@ -65,7 +71,7 @@ const Footer = (props) => {
     if (completed) {
       return (
         <Box sx={{ display: 'flex', direction: 'row', alignItems: 'center' }} gutterBottom>
-          <TypographyTimerTitleStyle>Pre-Sale started!</TypographyTimerTitleStyle>
+          <TypographyTimerTitleStartedStyle>Pre-Sale started!</TypographyTimerTitleStartedStyle>
         </Box>
       );
     } else {
@@ -113,14 +119,6 @@ const Footer = (props) => {
             >
               <SvgIcon component={mediumIcon} inheritViewBox sx={{ fontSize: 40 }} />
             </Link>
-            {/* <Link
-              href="https://discord.gg/zh3FGaGX6H"
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ display: 'flex', direction: 'row', alignItems: 'center', padding: '5px' }}
-            >
-              <SvgIcon component={youtubeIcon} inheritViewBox sx={{ fontSize: 40 }} />
-            </Link> */}
             <Link
               href="https://discord.gg/zh3FGaGX6H"
               target="_blank"

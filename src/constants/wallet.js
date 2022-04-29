@@ -13,5 +13,6 @@ export const MESSAGE = {
   NOT_SALE_TIME: 'Not available to purchase pSDA Tokens',
   EXCEED_PRESALE_MAX: 'Exceed maximum amount tokens per a wallet.',
   PURCHASE_SUCCESS: 'Purchased successfully',
-  PURCHASE_SUCCESS: 'Purchase failed',
+  PURCHASE_FAIL: 'Purchase failed',
+  NOT_INTEGER: 'Please input Integer',
 };

@@ -10,7 +10,8 @@ import { Header } from '../../components/Backgrounds';
 import { WalletToast } from '../../components/Toast';
 import { SEVERITY, MESSAGE } from '../../constants/wallet';
 import { ABI } from '../../constants/contractABI';
-import { CONTRACT_ADDRESS } from '../../constants';
+import { daiABI } from '../../constants/daiContractABI';
+import { CONTRACT_ADDRESS, DAI_TOKEN_ADDRESS } from '../../constants';
 import {
   BoxStyle,
   TypographyTitleStyle,
@@ -23,8 +24,7 @@ import {
 } from './styleds';
 import _ from 'lodash';
 import MultiProgress from 'react-multi-progress';
-import { BigNumber } from '@ethersproject/bignumber';
-import { ethers } from 'ethers';
+import { ethers, BigNumber } from 'ethers';
 import { useEthereumContract, useEthereumNetworkContract } from '../../hooks/useContract';
 
 const Home = (props) => {
@@ -39,8 +39,7 @@ const Home = (props) => {
   const [maxDaiPerInvestor, setMaxDaiPerInvestor] = useState(null);
   const [totalDai, setTotalDai] = useState(null);
   const [startingTime, setStartingTime] = useState(null);
-
-  const isLoading = false;
+  const [loader, setLoader] = useState(false);
 
   const checkIsNumber = (str) => {
     let re = /^[0-9]+$/;
@@ -117,6 +116,7 @@ const Home = (props) => {
 
   const ethereumContract = useEthereumNetworkContract(CONTRACT_ADDRESS, ABI, true);
   const ethereumInjectedContract = useEthereumContract(CONTRACT_ADDRESS, ABI, true);
+  const daiTokenContract = useEthereumContract(DAI_TOKEN_ADDRESS, daiABI, true);
   useEffect(() => {
     const getStatus = async () => {
       if (ethereumContract && ethereumContract.provider) {
@@ -126,13 +126,13 @@ const Home = (props) => {
           ethereumContract.totalDai(),
           ethereumContract.startingTime(),
         ]).then(([maxDai, maxDaiPerInvestor, totalDai, startingTime]) => {
-          setMaxDai(BigNumber.from(maxDai).toNumber());
-          setMaxDaiPerInvestor(BigNumber.from(maxDaiPerInvestor).toNumber());
-          setTotalDai(BigNumber.from(totalDai).toNumber());
+          setMaxDai(ethers.utils.formatEther(maxDai));
+          setMaxDaiPerInvestor(ethers.utils.formatEther(maxDaiPerInvestor));
+          setTotalDai(ethers.utils.formatEther(totalDai));
           setStartingTime(BigNumber.from(startingTime).toNumber());
           ethereumContract.removeAllListeners('Purchased');
           ethereumContract.on('Purchased', (investorAddress, amount, total, event) => {
-            setTotalDai(BigNumber.from(total).toNumber());
+            setTotalDai(ethers.utils.formatEther(totalDai));
           });
         });
       }
@@ -148,32 +148,42 @@ const Home = (props) => {
   }, [ethereumContract]);
 
   const handlePurchase = async () => {
-    if (active && amount) {
-      if (`${chainId}` === process.env.REACT_APP_DEFAULT_ETHEREUM_NETWORK_CHAIN_ID) {
-        if (startingTime <= new Date().getTime() / 1000) {
-          const presaleCounter = await ethereumContract.presaleCounter(account);
-          if (maxDai >= parseInt(presaleCounter) + amount) {
-            const tx = await ethereumInjectedContract.purchase(amount);
-            const receipt = await tx.wait();
-            if (!!receipt.transactionStatus) {
+    if (active) {
+      if (isNumber && amount > 0) {
+        if (`${chainId}` === process.env.REACT_APP_DEFAULT_ETHEREUM_NETWORK_CHAIN_ID) {
+          if (startingTime <= new Date().getTime() / 1000) {
+            const presaleCounter = await ethereumContract.presaleCounter(account);
+            if (maxDai >= parseInt(presaleCounter) + amount) {
+              setLoader(true);
+              const txApprove = await daiTokenContract.approve(
+                CONTRACT_ADDRESS,
+                amount + '000000000000000000'
+              );
+              await txApprove.wait();
+              const txPurchase = await ethereumInjectedContract.purchase(
+                amount + '000000000000000000'
+              );
+              const receiptPurchase = await txPurchase.wait();
+
               setIsToast(false);
               setIsToast(true);
-              setToastInfo({ severity: SEVERITY.ERROR, message: MESSAGE.PURCHASE_SUCCESS });
+              setToastInfo({ severity: SEVERITY.SUCCESS, message: MESSAGE.PURCHASE_SUCCESS });
+              setLoader(false);
             } else {
               setIsToast(false);
               setIsToast(true);
-              setToastInfo({ severity: SEVERITY.ERROR, message: MESSAGE.PURCHASE_FAIL });
+              setToastInfo({ severity: SEVERITY.ERROR, message: MESSAGE.EXCEED_PRESALE_MAX });
             }
           } else {
-            setIsToast(false);
-            setIsToast(true);
-            setToastInfo({ severity: SEVERITY.ERROR, message: MESSAGE.EXCEED_PRESALE_MAX });
+            notSaleTimeToast();
           }
         } else {
-          notSaleTimeToast();
+          wrongNetworkToast();
         }
       } else {
-        wrongNetworkToast();
+        setIsToast(false);
+        setIsToast(true);
+        setToastInfo({ severity: SEVERITY.ERROR, message: MESSAGE.NOT_INTEGER });
       }
     } else {
       notConnectedToast();
@@ -201,7 +211,7 @@ const Home = (props) => {
         <Grid container direction="column" justifyContent="center" alignItems="center">
           <TypographyTitleStyle gutterBottom>Bringing the impact back to ESG</TypographyTitleStyle>
           <TypographyMintedTokensStyle gutterBottom>
-            ${totalDai / 1000000}M / ${maxDai / 1000000}M
+            ${parseInt(totalDai)} / ${parseInt(maxDai)}
           </TypographyMintedTokensStyle>
           <Grid container item direction="row" justifyContent="center" alignItems="center">
             <Grid container item xs={11} direction="row">
@@ -298,7 +308,7 @@ const Home = (props) => {
             </Grid>
             <Grid container item xs={1} direction="row" justifyContent="center" alignItems="center">
               <TypographyPercentStyle gutterBottom>
-                {(totalDai * 100) / maxDai}%
+                {Math.ceil((totalDai * 100) / maxDai)}%
               </TypographyPercentStyle>
             </Grid>
           </Grid>
@@ -344,9 +354,37 @@ const Home = (props) => {
             </ButtonPurchaseStyle>
           </Box>
         </Grid>
+        <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loader}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </Container>
     </BoxStyle>
   );
 };
 
 export default Home;
+
+// purchaseTokenContract.allowance(account, vipContract.address).then((allowanceForVip) => {
+//   setIsAllowedForVip(parseInt(allowanceForVip.toString()) > 0);
+// });
+
+// const handleApprove = async () => {
+//   setLoading(true);
+//   try {
+//     const tx = await purchaseTokenContract.approve(
+//       vipContract.address,
+//       ethers.constants.MaxUint256
+//     );
+//     await tx.wait();
+//     setIsToast(true);
+//     setToastInfo({ message: 'Successfully Approved', severity: 'success' });
+//     setReload(reload + 1);
+//   } catch (_) {
+//     setIsToast(true);
+//     setToastInfo({
+//       message: 'Please check network or view transaction on explorer',
+//       severity: 'error',
+//     });
+//   }
+//   setLoading(false);
+// };
