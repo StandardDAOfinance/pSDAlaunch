@@ -5,40 +5,17 @@ import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import SvgIcon from '@mui/material/SvgIcon';
 import facepaint from 'facepaint';
 import { ReactComponent as linkedinIcon } from '../../assets/images/linkedin-brands.svg';
 import { ReactComponent as discordIcon } from '../../assets/images/discord-brands.svg';
 import { ReactComponent as mediumIcon } from '../../assets/images/medium-brands.svg';
 import { ReactComponent as twitterIcon } from '../../assets/images/twitter-brands.svg';
-import { ReactComponent as youtubeIcon } from '../../assets/images/youtube-brands.svg';
 import Countdown from 'react-countdown';
 
 const mq = facepaint(['@media(min-width: 600px)']);
 
 const fontBlinker = { fontFamily: 'Blinker', fontStyle: 'normal', fontWeight: 'bold' };
-
-const LinkStyle = styled(Link)`
-  ${mq({
-    textDecoration: 'none',
-    ...fontBlinker,
-    fontSize: '14px',
-    color: '#fff',
-    opacity: 0.72,
-    '&:hover': {
-      color: '#FFD945',
-    },
-  })}
-`;
-const TypographyCompanyNameStyle = styled(Typography)({
-  ...fontBlinker,
-  fontSize: '14px',
-  fontWeight: 'normal',
-  color: '#fff',
-  opacity: 0.72,
-  paddingInlineStart: '4rem',
-});
 
 const BoxStyle = styled(Box)`
   ${mq({
@@ -66,7 +43,6 @@ const TypographyTimerTimeStyle = styled(Typography)({
   width: '160px',
 });
 const Footer = (props) => {
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
   const renderer = ({ days, hours, minutes, seconds, completed }) => {
     if (completed) {
       return (

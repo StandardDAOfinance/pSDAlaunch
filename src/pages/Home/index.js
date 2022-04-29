@@ -22,7 +22,6 @@ import {
   ButtonPurchaseStyle,
   RegisterInputStyle,
 } from './styleds';
-import _ from 'lodash';
 import MultiProgress from 'react-multi-progress';
 import { ethers, BigNumber } from 'ethers';
 import { useEthereumContract, useEthereumNetworkContract } from '../../hooks/useContract';
@@ -33,14 +32,12 @@ const Home = (props) => {
   const [toastInfo, setToastInfo] = useState({});
   const [isToast, setIsToast] = useState(false);
   const [amount, setAmount] = useState(null);
-  const [input, setInput] = useState();
   const [isNumber, setIsNumber] = useState(true);
   const [maxDai, setMaxDai] = useState(null);
   const [maxDaiPerInvestor, setMaxDaiPerInvestor] = useState(null);
   const [totalDai, setTotalDai] = useState(null);
   const [startingTime, setStartingTime] = useState(null);
   const [loader, setLoader] = useState(false);
-  const [isApproved, setIsApproved] = useState(null);
 
   const checkIsNumber = (str) => {
     let re = /^[0-9]+$/;
@@ -162,14 +159,14 @@ const Home = (props) => {
                   amount + '000000000000000000'
                 );
                 setLoader(true);
-                const receiptApprove = await txApprove.wait();
+                await txApprove.wait();
                 setLoader(false);
 
                 const txPurchase = await ethereumInjectedContract.purchase(
                   amount + '000000000000000000'
                 );
                 setLoader(true);
-                const receiptPurchase = await txPurchase.wait();
+                await txPurchase.wait();
                 setLoader(false);
 
                 setIsToast(false);
@@ -358,9 +355,6 @@ const Home = (props) => {
               placeholder="Amount of DAI"
               disableUnderline={isNumber ? true : false}
               onChange={handleChange}
-              inputRef={(node) => {
-                setInput(node);
-              }}
             />
             <ButtonPurchaseStyle variant="contained" onClick={handlePurchase}>
               Buy pSDA
