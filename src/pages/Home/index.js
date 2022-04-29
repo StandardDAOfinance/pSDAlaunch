@@ -315,7 +315,7 @@ const Home = (props) => {
             </Grid>
           </Grid>
           <TypographyInfoStyle>
-            *If you are not whitelisted please click here{' '}
+            *If you have not completed the PPM or are not whitelisted please click here{' '}
             <Link
               href="https://t.me/StandardDAO"
               target="_blank"
