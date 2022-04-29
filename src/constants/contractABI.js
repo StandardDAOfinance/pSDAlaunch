@@ -6,6 +6,7 @@ export const ABI = [
       { internalType: 'uint256', name: '_startingTime', type: 'uint256' },
       { internalType: 'uint256', name: '_maxDaiPerInvestor', type: 'uint256' },
       { internalType: 'uint256', name: '_maxDai', type: 'uint256' },
+      { internalType: 'uint256', name: '_totalDai', type: 'uint256' },
     ],
     stateMutability: 'nonpayable',
     type: 'constructor',
@@ -88,6 +89,13 @@ export const ABI = [
   {
     inputs: [{ internalType: 'uint256', name: '_newTime', type: 'uint256' }],
     name: 'setStartingTime',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: '_totalDai', type: 'uint256' }],
+    name: 'setTotalDai',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
