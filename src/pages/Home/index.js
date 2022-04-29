@@ -40,6 +40,7 @@ const Home = (props) => {
   const [totalDai, setTotalDai] = useState(null);
   const [startingTime, setStartingTime] = useState(null);
   const [loader, setLoader] = useState(false);
+  const [isApproved, setIsApproved] = useState(null);
 
   const checkIsNumber = (str) => {
     let re = /^[0-9]+$/;
@@ -89,7 +90,7 @@ const Home = (props) => {
   const handleChange = (event) => {
     const result = checkIsNumber(event.target.value);
     if (result) {
-      setAmount(event.target.value);
+      setAmount(parseInt(event.target.value));
       setIsNumber(true);
     } else {
       setIsNumber(false);
@@ -126,13 +127,13 @@ const Home = (props) => {
           ethereumContract.totalDai(),
           ethereumContract.startingTime(),
         ]).then(([maxDai, maxDaiPerInvestor, totalDai, startingTime]) => {
-          setMaxDai(ethers.utils.formatEther(maxDai));
-          setMaxDaiPerInvestor(ethers.utils.formatEther(maxDaiPerInvestor));
-          setTotalDai(ethers.utils.formatEther(totalDai));
+          setMaxDai(parseInt(ethers.utils.formatEther(maxDai)));
+          setMaxDaiPerInvestor(parseInt(ethers.utils.formatEther(maxDaiPerInvestor)));
+          setTotalDai(parseInt(ethers.utils.formatEther(totalDai)));
           setStartingTime(BigNumber.from(startingTime).toNumber());
           ethereumContract.removeAllListeners('Purchased');
           ethereumContract.on('Purchased', (investorAddress, amount, total, event) => {
-            setTotalDai(ethers.utils.formatEther(total));
+            setTotalDai(parseInt(ethers.utils.formatEther(total)));
           });
         });
       }
@@ -152,27 +153,37 @@ const Home = (props) => {
       if (isNumber && amount > 0) {
         if (`${chainId}` === process.env.REACT_APP_DEFAULT_ETHEREUM_NETWORK_CHAIN_ID) {
           if (startingTime <= new Date().getTime() / 1000) {
-            const presaleCounter = await ethereumContract.presaleCounter(account);
-            if (maxDai >= ethers.utils.formatEther(presaleCounter) + amount) {
-              setLoader(true);
-              const txApprove = await daiTokenContract.approve(
-                CONTRACT_ADDRESS,
-                amount + '000000000000000000'
-              );
-              await txApprove.wait();
-              const txPurchase = await ethereumInjectedContract.purchase(
-                amount + '000000000000000000'
-              );
-              const receiptPurchase = await txPurchase.wait();
+            const balance = await daiTokenContract.balanceOf(account);
+            if (parseInt(ethers.utils.formatEther(balance)) >= amount) {
+              const presaleCounter = await ethereumContract.presaleCounter(account);
+              if (maxDai >= parseInt(ethers.utils.formatEther(presaleCounter)) + amount) {
+                const txApprove = await daiTokenContract.approve(
+                  CONTRACT_ADDRESS,
+                  amount + '000000000000000000'
+                );
+                setLoader(true);
+                const receiptApprove = await txApprove.wait();
+                setLoader(false);
 
-              setIsToast(false);
-              setIsToast(true);
-              setToastInfo({ severity: SEVERITY.SUCCESS, message: MESSAGE.PURCHASE_SUCCESS });
-              setLoader(false);
+                const txPurchase = await ethereumInjectedContract.purchase(
+                  amount + '000000000000000000'
+                );
+                setLoader(true);
+                const receiptPurchase = await txPurchase.wait();
+                setLoader(false);
+
+                setIsToast(false);
+                setIsToast(true);
+                setToastInfo({ severity: SEVERITY.SUCCESS, message: MESSAGE.PURCHASE_SUCCESS });
+              } else {
+                setIsToast(false);
+                setIsToast(true);
+                setToastInfo({ severity: SEVERITY.ERROR, message: MESSAGE.EXCEED_PRESALE_MAX });
+              }
             } else {
               setIsToast(false);
               setIsToast(true);
-              setToastInfo({ severity: SEVERITY.ERROR, message: MESSAGE.EXCEED_PRESALE_MAX });
+              setToastInfo({ severity: SEVERITY.ERROR, message: MESSAGE.INSUFFICIENT_FUND });
             }
           } else {
             notSaleTimeToast();
