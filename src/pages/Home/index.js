@@ -209,7 +209,9 @@ const Home = (props) => {
         <WalletToast info={toastInfo} isToast={isToast} handleClose={handleToastClose} />
         <Header />
         <Grid container direction="column" justifyContent="center" alignItems="center">
-          <TypographyTitleStyle gutterBottom>Bringing the impact back to ESG</TypographyTitleStyle>
+          <TypographyTitleStyle gutterBottom>
+            A community-led store of value backed by Impact
+          </TypographyTitleStyle>
           <TypographyMintedTokensStyle gutterBottom>
             ${parseInt(totalDai)} / ${parseInt(maxDai)}
           </TypographyMintedTokensStyle>
@@ -331,7 +333,7 @@ const Home = (props) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              mt: 1,
+              mt: 5,
               border: '1px solid rgba(255, 255, 255, 0.24)',
               borderRadius: '50px',
               padding: '0px 4px 0px 24px',

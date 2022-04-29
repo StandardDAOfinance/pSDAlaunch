@@ -22,7 +22,7 @@ export const TypographyTitleStyle = styled(Typography)`
     fontSize: ['36px', '48px'],
     marginTop: ['30px', '20px'],
     textAlign: 'center',
-    opacity: 0.72,
+    opacity: 0.85,
   })}
 `;
 export const TypographyInfoStyle = styled(Typography)`
@@ -31,7 +31,7 @@ export const TypographyInfoStyle = styled(Typography)`
     fontSize: ['16px', '20px'],
     marginTop: ['15px', '30px'],
     textAlign: 'center',
-    opacity: 0.72,
+    opacity: 0.85,
   })}
 `;
 export const TypographyMintedTokensStyle = styled(Typography)`
@@ -41,7 +41,7 @@ export const TypographyMintedTokensStyle = styled(Typography)`
     marginTop: ['20px', '20px'],
     marginBottom: ['20px', '20px'],
     textAlign: 'center',
-    opacity: 0.72,
+    opacity: 0.85,
   })}
 `;
 export const TypographyPercentStyle = styled(Typography)`
@@ -49,7 +49,7 @@ export const TypographyPercentStyle = styled(Typography)`
     ...fontBlinker,
     fontSize: ['24px', '36px'],
     textAlign: 'center',
-    opacity: 0.72,
+    opacity: 0.85,
   })}
 `;
 
@@ -57,7 +57,7 @@ export const TypographyPriceStyle = styled(Typography)`
   ${mq({
     ...fontBlinker,
     fontSize: ['24px', '36px'],
-    opacity: 0.72,
+    opacity: 0.8,
   })}
 `;
 
