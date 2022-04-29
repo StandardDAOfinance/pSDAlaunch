@@ -231,7 +231,7 @@ const Home = (props) => {
               <Grid
                 container
                 item
-                xs={4}
+                xs={2}
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
@@ -241,7 +241,7 @@ const Home = (props) => {
               <Grid
                 container
                 item
-                xs={4}
+                xs={3}
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
@@ -251,7 +251,7 @@ const Home = (props) => {
               <Grid
                 container
                 item
-                xs={4}
+                xs={7}
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
@@ -283,7 +283,7 @@ const Home = (props) => {
                     width: '3px',
                     position: 'absolute',
                     bottom: 0,
-                    left: '33.3%',
+                    left: '16.67%',
                     zIndex: 100,
                   }}
                 />
@@ -300,7 +300,7 @@ const Home = (props) => {
                     width: '3px',
                     position: 'absolute',
                     bottom: 0,
-                    left: '66.6%',
+                    right: '57.14%',
                     zIndex: 100,
                   }}
                 />

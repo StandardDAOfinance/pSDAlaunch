@@ -56,7 +56,7 @@ export const TypographyPercentStyle = styled(Typography)`
 export const TypographyPriceStyle = styled(Typography)`
   ${mq({
     ...fontBlinker,
-    fontSize: ['24px', '36px'],
+    fontSize: ['18px', '36px'],
     opacity: 0.8,
   })}
 `;

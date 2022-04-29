@@ -15,5 +15,5 @@ export const MESSAGE = {
   PURCHASE_SUCCESS: 'Purchased successfully',
   PURCHASE_FAIL: 'Purchase failed',
   NOT_INTEGER: 'Please input the amount of DAI as integer value',
-  INSUFFICIENT_FUND: 'Insufficient fund in your wallet',
+  INSUFFICIENT_FUND: 'Insufficient DAI in your wallet',
 };
