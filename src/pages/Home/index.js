@@ -29,6 +29,13 @@ import { useEthereumContract, useEthereumNetworkContract } from '../../hooks/use
 const Home = (props) => {
   const { active, chainId, account } = props;
 
+  const maxSupply = 60000000;
+  const firstTrancheFund = 500000;
+  const secondTrancheFund = 1500000;
+  const firstPrice = 0.025;
+  const secondPrice = 0.05;
+  const thirdPrice = 0.1;
+
   const [toastInfo, setToastInfo] = useState({});
   const [isToast, setIsToast] = useState(false);
   const [amount, setAmount] = useState(null);
@@ -228,7 +235,7 @@ const Home = (props) => {
               <Grid
                 container
                 item
-                xs={2}
+                xs={4}
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
@@ -238,7 +245,7 @@ const Home = (props) => {
               <Grid
                 container
                 item
-                xs={3}
+                xs={4}
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
@@ -248,7 +255,7 @@ const Home = (props) => {
               <Grid
                 container
                 item
-                xs={7}
+                xs={4}
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
@@ -280,7 +287,7 @@ const Home = (props) => {
                     width: '3px',
                     position: 'absolute',
                     bottom: 0,
-                    left: '16.67%',
+                    left: '33.334%',
                     zIndex: 100,
                   }}
                 />
@@ -297,7 +304,7 @@ const Home = (props) => {
                     width: '3px',
                     position: 'absolute',
                     bottom: 0,
-                    right: '57.14%',
+                    left: '66.667%',
                     zIndex: 100,
                   }}
                 />
@@ -306,7 +313,14 @@ const Home = (props) => {
                 transitionTime={1.2}
                 elements={[
                   {
-                    value: (totalDai * 100) / maxDai,
+                    value:
+                      totalDai > secondTrancheFund
+                        ? (2 / 3) * 100 +
+                          ((totalDai - secondTrancheFund) / thirdPrice / maxSupply) * 100
+                        : totalDai > firstTrancheFund
+                        ? (1 / 3) * 100 +
+                          ((totalDai - firstTrancheFund) / secondPrice / maxSupply) * 100
+                        : (totalDai / firstPrice / maxSupply) * 100,
                     color: '#6cbdc3',
                   },
                 ]}
@@ -318,7 +332,16 @@ const Home = (props) => {
             </Grid>
             <Grid container item xs={1} direction="row" justifyContent="center" alignItems="center">
               <TypographyPercentStyle gutterBottom>
-                {Math.ceil((totalDai * 100) / maxDai)}%
+                {Math.ceil(
+                  totalDai > secondTrancheFund
+                    ? (2 / 3) * 100 +
+                        ((totalDai - secondTrancheFund) / thirdPrice / maxSupply) * 100
+                    : totalDai > firstTrancheFund
+                    ? (1 / 3) * 100 +
+                      ((totalDai - firstTrancheFund) / secondPrice / maxSupply) * 100
+                    : (totalDai / firstPrice / maxSupply) * 100
+                )}
+                %
               </TypographyPercentStyle>
             </Grid>
           </Grid>
