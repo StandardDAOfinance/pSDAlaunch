@@ -47,7 +47,7 @@ export const TypographyMintedTokensStyle = styled(Typography)`
 export const TypographyPercentStyle = styled(Typography)`
   ${mq({
     ...fontBlinker,
-    fontSize: ['24px', '36px'],
+    fontSize: ['16px', '36px'],
     textAlign: 'center',
     opacity: 0.85,
   })}
@@ -56,7 +56,7 @@ export const TypographyPercentStyle = styled(Typography)`
 export const TypographyPriceStyle = styled(Typography)`
   ${mq({
     ...fontBlinker,
-    fontSize: ['18px', '36px'],
+    fontSize: ['18px', '30px'],
     opacity: 0.8,
   })}
 `;

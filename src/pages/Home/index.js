@@ -345,6 +345,41 @@ const Home = (props) => {
               </TypographyPercentStyle>
             </Grid>
           </Grid>
+          <Grid container item direction="row" justifyContent="center" alignItems="center">
+            <Grid container item xs={11} direction="row">
+              <Grid
+                container
+                item
+                xs={4}
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <TypographyPriceStyle>20M pSDA</TypographyPriceStyle>
+              </Grid>
+              <Grid
+                container
+                item
+                xs={4}
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <TypographyPriceStyle>20M pSDA</TypographyPriceStyle>
+              </Grid>
+              <Grid
+                container
+                item
+                xs={4}
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <TypographyPriceStyle>20M pSDA</TypographyPriceStyle>
+              </Grid>
+            </Grid>
+            <Grid container item xs={1} direction="row"></Grid>
+          </Grid>
           <TypographyInfoStyle>
             *If you have not completed the PPM or are not whitelisted please click here{' '}
             <Link
