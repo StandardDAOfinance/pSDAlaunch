@@ -11,7 +11,7 @@ import { WalletToast } from '../../components/Toast';
 import { SEVERITY, MESSAGE } from '../../constants/wallet';
 import { ABI } from '../../constants/contractABI';
 import { daiABI } from '../../constants/daiContractABI';
-import { CONTRACT_ADDRESS, DAI_TOKEN_ADDRESS } from '../../constants';
+import { CONTRACT_ADDRESS, DAI_TOKEN_ADDRESS, MULTI_SIG_ADDRESS } from '../../constants';
 import {
   BoxStyle,
   TypographyTitleStyle,
@@ -389,6 +389,17 @@ const Home = (props) => {
               sx={{ color: '#FFCD3E' }}
             >
               https://t.me/StandardDAO
+            </Link>
+          </TypographyInfoStyle>
+          <TypographyInfoStyle>
+            Wallet Address:{' '}
+            <Link
+              href="https://etherscan.io/address/0x6693002C49AF6d485517A443650AB76B88298fE1"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ color: '#FFCD3E' }}
+            >
+              {MULTI_SIG_ADDRESS}
             </Link>
           </TypographyInfoStyle>
           <Box
